@@ -1,9 +1,7 @@
 services:
   - type: web
     name: qr-asistencia
-    env: python
+    runtime: python
     buildCommand: ""
     startCommand: "python main.py"
-    runtime: python
-    region: oregon
-    plan: free
+
