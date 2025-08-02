@@ -1,19 +1,11 @@
-from flask import Flask, send_file
-import qrcode
-import io
-import datetime
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
-app = Flask(__name__)
+app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 
-@app.route("/")
-def generate_qr():
-    now = datetime.datetime.now()
-    unique_url = f"https://tr.ee/cMbDNO43pY?t={now.strftime('%Y%m%d%H%M%S')}"
-    img = qrcode.make(unique_url)
-    buf = io.BytesIO()
-    img.save(buf, format='PNG')
-    buf.seek(0)
-    return send_file(buf, mimetype='image/png')
+@app.get("/", response_class=HTMLResponse)
+async def read_form(request: Request):
+    return templates.TemplateResponse("formulario.html", {"request": request})
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=3000)
